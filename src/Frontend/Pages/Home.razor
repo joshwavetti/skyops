@@ -1,0 +1,108 @@
+﻿@page "/"
+@using Frontend.Models
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<div class="sky-container">
+    <div class="search-box">
+        <h1>🌤 SkyOps</h1>
+        <p class="subtitle">Cloud-Native Weather Dashboard</p>
+        <div class="search-row">
+            <input @bind="cityInput" @bind:event="oninput" @onkeydown="HandleKeyDown" placeholder="Enter a city..."
+                   class="city-input" />
+            <button @onclick="SearchWeather" class="search-btn" disabled="@isLoading">
+                @(isLoading ? "Loading..." : "Search")
+            </button>
+        </div>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p class="error">@errorMessage</p>
+        }
+    </div>
+
+    @if (weather != null)
+    {
+        <div class="weather-card">
+            <div class="weather-header">
+                <div>
+                    <h2>@weather.Name, @weather.Sys.Country</h2>
+                    <p class="weather-desc">@weather.Weather[0].Description</p>
+                </div>
+                <img src="https://openweathermap.org/img/wn/@(weather.Weather[0].Icon)@@2x.png" alt="icon" />
+            </div>
+            <div class="weather-stats">
+                <div class="stat">
+                    <span class="stat-value">@Math.Round(weather.Main.Temp)°C</span>
+                    <span class="stat-label">Temperature</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">@Math.Round(weather.Main.Feels_like)°C</span>
+                    <span class="stat-label">Feels Like</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">@weather.Main.Humidity%</span>
+                    <span class="stat-label">Humidity</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">@Math.Round(weather.Wind.Speed) m/s</span>
+                    <span class="stat-label">Wind</span>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (forecast != null)
+    {
+        <div class="forecast-container">
+            <h3>5-Day Forecast</h3>
+            <div class="forecast-grid">
+                @foreach (var item in forecast.List.Where((x, i) => i % 8 == 0).Take(5))
+                {
+                    <div class="forecast-card">
+                        <p class="forecast-date">@DateTime.Parse(item.Dt_txt).ToString("ddd dd MMM")</p>
+                        <img src="https://openweathermap.org/img/wn/@(item.Weather[0].Icon).png" alt="icon" />
+                        <p class="forecast-temp">@Math.Round(item.Main.Temp)°C</p>
+                        <p class="forecast-desc">@item.Weather[0].Main</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string cityInput = "";
+    private WeatherResponse? weather;
+    private ForecastResponse? forecast;
+    private string errorMessage = "";
+    private bool isLoading = false;
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchWeather();
+    }
+
+    private async Task SearchWeather()
+    {
+        if (string.IsNullOrWhiteSpace(cityInput)) return;
+
+        isLoading = true;
+        errorMessage = "";
+        weather = null;
+        forecast = null;
+
+        try
+        {
+            weather = await Http.GetFromJsonAsync<WeatherResponse>($"/weather/{cityInput}");
+            forecast = await Http.GetFromJsonAsync<ForecastResponse>($"/forecast/{cityInput}");
+        }
+        catch
+        {
+            errorMessage = $"Could not find weather for '{cityInput}'. Please check the city name.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
