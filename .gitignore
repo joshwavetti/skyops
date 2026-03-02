@@ -1,0 +1,13 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# User secrets and local settings
+**/appsettings.Development.json
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
