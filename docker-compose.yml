@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  weather-api:
+    build:
+      context: ./src/WeatherApi
+    environment:
+      - OpenWeather__ApiKey=${OPENWEATHER_API_KEY}
+    ports:
+      - "5292:8080"
+
+  gateway-api:
+    build:
+      context: ./src/GatewayApi
+    environment:
+      - WeatherApi__BaseUrl=http://weather-api:8080
+    ports:
+      - "5204:8080"
+    depends_on:
+      - weather-api
+
+  frontend:
+    build:
+      context: ./src/Frontend
+    ports:
+      - "5151:80"
+    depends_on:
+      - gateway-api
