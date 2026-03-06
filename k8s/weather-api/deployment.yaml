@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-api
+  template:
+    metadata:
+      labels:
+        app: weather-api
+    spec:
+      containers:
+      - name: weather-api
+        image: skyopsacrdev001.azurecr.io/weather-api:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: OpenWeather__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: weather-secret
+              key: api-key
