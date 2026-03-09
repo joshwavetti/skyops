@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" width="900" height="580">
+  <!-- Background -->
+  <rect width="900" height="580" fill="#0f172a" rx="16"/>
+
+  <!-- Title -->
+  <text x="450" y="45" font-family="Segoe UI, sans-serif" font-size="22" font-weight="bold" fill="white" text-anchor="middle">☁️ SkyOps — Architecture</text>
+
+  <!-- Developer Box -->
+  <rect x="30" y="80" width="130" height="70" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="95" y="108" font-family="Segoe UI, sans-serif" font-size="13" fill="#93c5fd" text-anchor="middle">👨‍💻 Developer</text>
+  <text x="95" y="128" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">git push</text>
+  <text x="95" y="143" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">to main</text>
+
+  <!-- Arrow: Developer -> GitHub -->
+  <line x1="160" y1="115" x2="210" y2="115" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- GitHub Box -->
+  <rect x="210" y="80" width="130" height="70" rx="10" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+  <text x="275" y="108" font-family="Segoe UI, sans-serif" font-size="13" fill="#a5b4fc" text-anchor="middle">🐙 GitHub</text>
+  <text x="275" y="128" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Source Control</text>
+  <text x="275" y="143" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">+ Actions CI/CD</text>
+
+  <!-- Arrow: GitHub -> ACR -->
+  <line x1="340" y1="115" x2="390" y2="115" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ACR Box -->
+  <rect x="390" y="80" width="130" height="70" rx="10" fill="#1e293b" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="455" y="108" font-family="Segoe UI, sans-serif" font-size="13" fill="#7dd3fc" text-anchor="middle">🐳 ACR</text>
+  <text x="455" y="128" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Azure Container</text>
+  <text x="455" y="143" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Registry</text>
+
+  <!-- Arrow: GitHub -> ArgoCD (down) -->
+  <line x1="275" y1="150" x2="275" y2="220" stroke="#6366f1" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+  <!-- ArgoCD Box -->
+  <rect x="210" y="220" width="130" height="70" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="275" y="248" font-family="Segoe UI, sans-serif" font-size="13" fill="#fcd34d" text-anchor="middle">🔄 ArgoCD</text>
+  <text x="275" y="268" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">GitOps Controller</text>
+  <text x="275" y="283" font-family="Segoe UI, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Auto-sync</text>
+
+  <!-- AKS Cluster Box -->
+  <rect x="390" y="190" width="470" height="280" rx="12" fill="#0f172a" stroke="#22c55e" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="625" y="215" font-family="Segoe UI, sans-serif" font-size="13" fill="#86efac" text-anchor="middle">☸️ Azure Kubernetes Service (AKS)</text>
+
+  <!-- Arrow: ArgoCD -> AKS -->
+  <line x1="340" y1="255" x2="390" y2="255" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Arrow: ACR -> AKS -->
+  <line x1="455" y1="150" x2="455" y2="225" stroke="#0ea5e9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Frontend Pod -->
+  <rect x="410" y="230" width="130" height="70" rx="10" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="475" y="258" font-family="Segoe UI, sans-serif" font-size="12" fill="#c4b5fd" text-anchor="middle">🌐 Frontend</text>
+  <text x="475" y="275" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Blazor WASM</text>
+  <text x="475" y="290" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Nginx — LoadBalancer</text>
+
+  <!-- GatewayApi Pod -->
+  <rect x="570" y="230" width="130" height="70" rx="10" fill="#1e293b" stroke="#ec4899" stroke-width="2"/>
+  <text x="635" y="253" font-family="Segoe UI, sans-serif" font-size="12" fill="#f9a8d4" text-anchor="middle">🔀 GatewayApi</text>
+  <text x="635" y="270" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">BFF Pattern</text>
+  <text x="635" y="285" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">C# .NET 9</text>
+  <text x="635" y="300" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">LoadBalancer</text>
+
+  <!-- WeatherApi Pod -->
+  <rect x="570" y="340" width="130" height="70" rx="10" fill="#1e293b" stroke="#14b8a6" stroke-width="2"/>
+  <text x="635" y="363" font-family="Segoe UI, sans-serif" font-size="12" fill="#5eead4" text-anchor="middle">🌤 WeatherApi</text>
+  <text x="635" y="380" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">C# .NET 9</text>
+  <text x="635" y="395" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">ClusterIP (internal)</text>
+
+  <!-- Terraform Box -->
+  <rect x="730" y="230" width="115" height="70" rx="10" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+  <text x="787" y="258" font-family="Segoe UI, sans-serif" font-size="12" fill="#d8b4fe" text-anchor="middle">🏗 Terraform</text>
+  <text x="787" y="275" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Provisions AKS</text>
+  <text x="787" y="290" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">ACR + RG</text>
+
+  <!-- OpenWeatherMap Box -->
+  <rect x="570" y="440" width="130" height="70" rx="10" fill="#1e293b" stroke="#f97316" stroke-width="2"/>
+  <text x="635" y="463" font-family="Segoe UI, sans-serif" font-size="12" fill="#fdba74" text-anchor="middle">🌍 OpenWeather</text>
+  <text x="635" y="480" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">External API</text>
+  <text x="635" y="495" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">Weather Data</text>
+
+  <!-- Browser Box -->
+  <rect x="410" y="440" width="130" height="70" rx="10" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+  <text x="475" y="468" font-family="Segoe UI, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">🖥 Browser</text>
+  <text x="475" y="485" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">User searches</text>
+  <text x="475" y="500" font-family="Segoe UI, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">city weather</text>
+
+  <!-- Arrows inside AKS -->
+  <!-- Browser -> Frontend -->
+  <line x1="475" y1="440" x2="475" y2="300" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- Frontend -> GatewayApi -->
+  <line x1="540" y1="265" x2="570" y2="265" stroke="#ec4899" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- GatewayApi -> WeatherApi -->
+  <line x1="635" y1="300" x2="635" y2="340" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- WeatherApi -> OpenWeatherMap -->
+  <line x1="635" y1="410" x2="635" y2="440" stroke="#f97316" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <rect x="30" y="420" width="340" height="140" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="200" y="445" font-family="Segoe UI, sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">Legend</text>
+  <line x1="50" y1="460" x2="80" y2="460" stroke="#3b82f6" stroke-width="2"/>
+  <text x="90" y="464" font-family="Segoe UI, sans-serif" font-size="11" fill="#94a3b8">Code push flow</text>
+  <line x1="50" y1="480" x2="80" y2="480" stroke="#6366f1" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="90" y="484" font-family="Segoe UI, sans-serif" font-size="11" fill="#94a3b8">GitOps sync (ArgoCD)</text>
+  <line x1="50" y1="500" x2="80" y2="500" stroke="#22c55e" stroke-width="2"/>
+  <text x="90" y="504" font-family="Segoe UI, sans-serif" font-size="11" fill="#94a3b8">AKS cluster boundary</text>
+  <line x1="50" y1="520" x2="80" y2="520" stroke="#ec4899" stroke-width="2"/>
+  <text x="90" y="524" font-family="Segoe UI, sans-serif" font-size="11" fill="#94a3b8">Service-to-service (internal)</text>
+  <line x1="50" y1="540" x2="80" y2="540" stroke="#f97316" stroke-width="2"/>
+  <text x="90" y="544" font-family="Segoe UI, sans-serif" font-size="11" fill="#94a3b8">External API call</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>
