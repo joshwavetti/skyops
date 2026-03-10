@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: weather-api
-        image: skyopsacrdev001.azurecr.io/weather-api:cbfddc9f0ea62a0f92ee8fb83c189b8b3ba06f04
+        image: skyopsacrdev001.azurecr.io/weather-api:c36a94c0a9f94c8d6da29bd5a2bcb33d92100d52
         ports:
         - containerPort: 8080
         env:
