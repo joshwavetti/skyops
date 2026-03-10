@@ -2,7 +2,7 @@
 
 A production-grade, cloud-native weather dashboard built with C# .NET, Blazor, and a full DevOps pipeline on Azure Kubernetes Service (AKS).
 
-![Architecture](docs/architecture.png)
+![Architecture](docs/architecture.svg)
 
 ## 🌟 Features
 
