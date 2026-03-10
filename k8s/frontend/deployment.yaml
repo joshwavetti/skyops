@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: skyopsacrdev001.azurecr.io/frontend:ebbbee096daec016d646771e83079aaf717db881
+        image: skyopsacrdev001.azurecr.io/frontend:1acb10157a233f8de907987e83beaef3207b4203
         ports:
         - containerPort: 80
