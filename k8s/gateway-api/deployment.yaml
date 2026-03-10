@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: gateway-api
-        image: skyopsacrdev001.azurecr.io/gateway-api:1acb10157a233f8de907987e83beaef3207b4203
+        image: skyopsacrdev001.azurecr.io/gateway-api:cbfddc9f0ea62a0f92ee8fb83c189b8b3ba06f04
         ports:
         - containerPort: 8080
         env:
