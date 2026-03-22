@@ -1,30 +1,34 @@
-# SkyOps ☁️
+# SkyOps
 
-> A production-grade, cloud-native weather platform — built to demonstrate a real-world Azure DevOps workflow end to end.
+A cloud-native weather dashboard built as a hands-on learning
+project to get practical experience with a production-grade
+Azure DevOps stack.
 
-![Architecture](docs/architecture.svg)
-
-[![CI](https://github.com/joshwavetti/skyops/actions/workflows/ci.yml/badge.svg)](https://github.com/joshwavetti/skyops/actions/workflows/ci.yml)
-![.NET](https://img.shields.io/badge/.NET_9-512BD4?logo=dotnet&logoColor=white)
-![Azure](https://img.shields.io/badge/Azure-0078D4?logo=microsoftazure&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
-![Terraform](https://img.shields.io/badge/Terraform-7B42BC?logo=terraform&logoColor=white)
-![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?logo=argo&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-green)
+> **Transparency note:** This project was built with significant
+> AI assistance (Claude, GitHub Copilot) as a guided learning
+> exercise. It is not presented as independent original work.
+> The goal was to understand the end-to-end workflow — from
+> local development to a live AKS deployment — by actually
+> building it, not just reading about it.
 
 ---
 
-## What is this?
+## What I was learning
 
-SkyOps is a containerized, microservices-based weather dashboard deployed on **Azure Kubernetes Service (AKS)**. The app itself is intentionally simple — the point is the infrastructure around it: immutable Docker images, GitOps-driven deployments via ArgoCD, Terraform-provisioned Azure resources, and a fully automated GitHub Actions CI pipeline.
-
-This repo is the evolution of an earlier [Azure DevOps CI prototype](https://github.com/joshwavetti/azure-cicd-pipeline-demo), where I first worked out self-hosted agents and ACR integration. SkyOps takes that foundation and builds a complete, production-shaped system on top of it.
+- Provisioning AKS and ACR from scratch with Terraform
+- Writing Kubernetes manifests — Deployments, Services,
+  ClusterIP vs LoadBalancer
+- Containerising a multi-service .NET application with Docker
+  and multi-stage builds
+- Setting up a GitHub Actions CI pipeline that builds and
+  pushes images to ACR
+- ArgoCD GitOps — automatically syncing the cluster state
+  to match what is in Git
+- BFF (Backend for Frontend) architecture pattern
 
 ---
 
 ## Architecture
-
-The system follows a **Backend-for-Frontend (BFF)** pattern to keep the public API surface minimal and the frontend decoupled from internal service changes.
 
 ```
 Browser (Blazor WASM)
@@ -40,90 +44,62 @@ Browser (Blazor WASM)
   OpenWeatherMap API
 ```
 
-| Service | Technology | Role |
-|---|---|---|
-| `frontend` | Blazor WASM + Nginx | UI served as static files |
-| `gateway-api` | C# .NET 9 Minimal API | Single public entry point, request aggregation |
-| `weather-api` | C# .NET 9 Minimal API | Fetches and caches weather data |
-
-**Why BFF?** The frontend only talks to one endpoint. Internal services stay behind a ClusterIP and are never exposed directly — a pattern common in production microservices environments.
+| Service       | Technology            | Role                      |
+| ------------- | --------------------- | ------------------------- |
+| `frontend`    | Blazor WASM + Nginx   | Weather dashboard UI      |
+| `gateway-api` | C# .NET 9 Minimal API | Single public entry point |
+| `weather-api` | C# .NET 9 Minimal API | Fetches weather data      |
 
 ---
 
-## Tech Stack
+## Tech stack
 
-| Layer | Technology |
-|---|---|
-| Backend | C# .NET 9 Minimal API |
-| Frontend | Blazor WebAssembly |
-| Containerization | Docker, Docker Compose |
-| Container Registry | Azure Container Registry (ACR) |
-| Orchestration | Kubernetes on AKS |
-| Infrastructure | Terraform (IaC) |
-| GitOps / CD | ArgoCD |
-| CI Pipeline | GitHub Actions |
-| Cloud | Microsoft Azure |
-
----
-
-## CI/CD Pipeline
-
-A push to `main` triggers a fully automated pipeline with no manual steps:
-
-```
-git push → main
-    │
-    ▼
-GitHub Actions
-    ├── Build 3 Docker images in parallel
-    ├── Push tagged images to Azure Container Registry
-    └── Update image tags in k8s manifests → commit back to repo
-                │
-                ▼
-            ArgoCD (polling)
-                └── Detects manifest change → syncs to AKS cluster
-```
-
-**Why GitOps (ArgoCD) instead of `kubectl apply` in CI?**
-The Kubernetes cluster is the source of truth for what is *running*. The Git repo is the source of truth for what *should* run. ArgoCD continuously reconciles the two — meaning drift is detected and corrected automatically, and every deployment is fully auditable in version history.
+| Area          | Technology                     |
+| ------------- | ------------------------------ |
+| Backend       | C# .NET 9 Minimal API          |
+| Frontend      | Blazor WebAssembly             |
+| Containers    | Docker, Docker Compose         |
+| Registry      | Azure Container Registry (ACR) |
+| Orchestration | Kubernetes (AKS)               |
+| IaC           | Terraform                      |
+| GitOps        | ArgoCD                         |
+| CI/CD         | GitHub Actions                 |
+| Cloud         | Microsoft Azure                |
 
 ---
 
-## Repository Structure
+## CI pipeline
 
-```
-skyops/
-├── src/
-│   ├── WeatherApi/           # Weather data microservice
-│   ├── GatewayApi/           # BFF gateway
-│   └── Frontend/             # Blazor WASM app
-├── infra/
-│   └── terraform/            # AKS cluster, ACR, resource group
-├── k8s/
-│   ├── weather-api/          # Deployment, Service manifests
-│   ├── gateway-api/          # Deployment, Service manifests
-│   ├── frontend/             # Deployment, Service manifests
-│   └── argocd/               # ArgoCD Application definition
-├── .github/
-│   └── workflows/
-│       └── ci.yml            # GitHub Actions pipeline
-├── docker-compose.yml        # Local development stack
-└── docs/
-    └── architecture.svg
-```
+On every push to `main`, GitHub Actions:
+
+1. Builds Docker images for all three services
+2. Pushes tagged images to Azure Container Registry
+3. Updates image tags in the Kubernetes manifests
+4. Commits the updated manifests back to the repo
+
+ArgoCD then detects the manifest change and syncs the
+cluster automatically.
+
+> Note: The CI pipeline requires Azure secrets
+> (ACR credentials, service principal) configured as
+> GitHub repository secrets to run successfully.
+> It will fail without them — this is expected when
+> running from a fork or fresh clone.
 
 ---
 
-## Running Locally
+## Running locally
 
-**Prerequisites:** .NET 9 SDK, Docker Desktop, free [OpenWeatherMap API key](https://openweathermap.org/api)
+Prerequisites: .NET 9 SDK, Docker Desktop,
+free OpenWeatherMap API key
 
 ```bash
 git clone https://github.com/joshwavetti/skyops.git
 cd skyops
 ```
 
-Add your API key to `src/WeatherApi/appsettings.Development.json`:
+Add your API key to
+`src/WeatherApi/appsettings.Development.json`:
 
 ```json
 {
@@ -137,57 +113,64 @@ Add your API key to `src/WeatherApi/appsettings.Development.json`:
 docker-compose up --build
 ```
 
-Open **http://localhost:5151**
+Open http://localhost:5151
 
 ---
 
 ## Deploying to Azure
 
-**Prerequisites:** Azure CLI, Terraform ≥ 1.6, kubectl
+Prerequisites: Azure CLI, Terraform, kubectl
 
 ```bash
-# 1. Authenticate
+# 1. Login
 az login
 
-# 2. Provision AKS + ACR with Terraform
+# 2. Provision infrastructure
 cd infra/terraform
 terraform init
 terraform apply
 
-# 3. Configure kubectl
-az aks get-credentials --resource-group rg-skyops --name aks-skyops
+# 3. Connect kubectl to the cluster
+az aks get-credentials \
+  --resource-group rg-skyops \
+  --name aks-skyops
 
-# 4. Store the API key as a K8s secret
-kubectl create secret generic weather-secret --from-literal=api-key=YOUR_API_KEY
+# 4. Store API key as Kubernetes secret
+kubectl create secret generic weather-secret \
+  --from-literal=api-key=YOUR_API_KEY
 
-# 5. Install ArgoCD and register the app
+# 5. Install ArgoCD
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd \
+  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f k8s/argocd/skyops-app.yaml
 ```
 
-From here, every push to `main` deploys automatically. No further manual steps.
+---
+
+## Known limitations and honest notes
+
+- README was largely AI-generated in its original form and
+  contained inaccuracies (e.g. claims about parallel builds
+  that were not implemented). This has been corrected.
+- Architecture scaffolding was AI-assisted.
+- Helm is not yet used — raw manifests only. This is a
+  known gap I plan to address in a follow-up project.
+- The CI pipeline will fail without Azure secrets configured —
+  this is documented and expected.
 
 ---
 
-## Cost Management
+## What's next
 
-Designed to run cheaply on an Azure student/pay-as-you-go subscription:
+This project gave me a complete end-to-end map of the Azure
+cloud-native stack. My next projects will be built with
+progressively less AI assistance, going deeper on:
 
-- Single-node AKS cluster (`Standard_B2ls_v2`)
-- Basic tier ACR
-- `terraform destroy` tears everything down completely when not in use
-- `terraform apply` restores the full environment in ~10 minutes
-
----
-
-## Challenges & Lessons Learned
-
-**ArgoCD image tag reconciliation** — ArgoCD manages declarative state, but CI needs to write new image tags back into the manifests. The solution was having GitHub Actions commit the updated tags directly to the repo, which ArgoCD then picks up on its next sync cycle. This keeps CI and CD cleanly separated.
-
-**AKS + ACR authentication** — Rather than using admin credentials, the AKS kubelet identity is granted the `AcrPull` role via Terraform. No secrets stored, no rotation needed.
-
-**Student subscription region limits** — Azure Portal filters out valid regions on student subscriptions. Worked around by provisioning via Azure CLI with explicit `--location` and `--size` flags, which bypasses the portal's restrictions entirely.
+- Terraform modules and remote state management
+- Helm charts for Kubernetes package management
+- Proper Kubernetes networking and ingress controllers
+- Observability — Prometheus and Grafana
 
 ---
 
