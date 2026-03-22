@@ -5,10 +5,10 @@ project to get practical experience with a production-grade
 Azure DevOps stack.
 
 > **Transparency note:** This project was built with significant
-> AI assistance (Claude, GitHub Copilot) as a guided learning
+> AI assistance (Claude) and Stack Overflow as a guided learning
 > exercise. It is not presented as independent original work.
-> The goal was to understand the end-to-end workflow — from
-> local development to a live AKS deployment — by actually
+> The goal was to understand the end-to-end workflow - from
+> local development to a live AKS deployment - by actually
 > building it, not just reading about it.
 
 ---
@@ -16,13 +16,12 @@ Azure DevOps stack.
 ## What I was learning
 
 - Provisioning AKS and ACR from scratch with Terraform
-- Writing Kubernetes manifests — Deployments, Services,
-  ClusterIP vs LoadBalancer
+- Writing Kubernetes manifests
 - Containerising a multi-service .NET application with Docker
   and multi-stage builds
 - Setting up a GitHub Actions CI pipeline that builds and
   pushes images to ACR
-- ArgoCD GitOps — automatically syncing the cluster state
+- ArgoCD GitOps for automatically syncing the cluster state
   to match what is in Git
 - BFF (Backend for Frontend) architecture pattern
 
@@ -154,9 +153,9 @@ kubectl apply -f k8s/argocd/skyops-app.yaml
   contained inaccuracies (e.g. claims about parallel builds
   that were not implemented). This has been corrected.
 - Architecture scaffolding was AI-assisted.
-- Helm is not yet used — raw manifests only. This is a
+- Helm is not yet used - raw manifests only. This is a
   known gap I plan to address in a follow-up project.
-- The CI pipeline will fail without Azure secrets configured —
+- The CI pipeline will fail without Azure secrets configured -
   this is documented and expected.
 
 ---
@@ -168,11 +167,8 @@ cloud-native stack. My next projects will be built with
 progressively less AI assistance, going deeper on:
 
 - Terraform modules and remote state management
-- Helm charts for Kubernetes package management
-- Proper Kubernetes networking and ingress controllers
-- Observability — Prometheus and Grafana
-
----
+- ArgoCD + Helm charts for GitOps
+- Use of PostgreSQL StatefulSet Database
 
 ## License
 
