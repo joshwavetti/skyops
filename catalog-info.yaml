@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: skyops
+  description: Cloud-native GitOps weather platform on AKS with ArgoCD, Terraform and a Blazor frontend
+  annotations:
+    github.com/project-slug: joshwavetti/skyops
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user:guest
